@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ahorros</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="contenedor-principal">
+        <nav class="menu-navegacion">
+            <a href="index.html" class="btn-nav">🏠 Panel Principal</a>
+            <a href="calculadora.html" class="btn-nav activo">🧮 Calculadora</a>
+            <a href="historial.html" class="btn-nav">📚 Historiales</a>
+        </nav>
+
+        <header>
+            <h1>🧮 Calculadora de Distribución</h1>
+            <p style="color: var(--texto-secundario); margin-top: 5px;">Planificá tus finanzas usando la regla ideal de distribución de ingresos.</p>
+        </header>
+
+        <section class="seccion-formulario" style="margin-top: 20px;">
+            <h2>Tus Ingresos Actuales del Mes</h2>
+            <div style="background: var(--bg-principal); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                <span style="font-size: 14px; color: var(--texto-secundario); display: block; font-weight: 600;">TOTAL DE SUELDOS REGISTRADOS:</span>
+                <span id="sueldo-real-monto" style="font-size: 24px; font-weight: 800; color: var(--color-verde);">$U 0.00</span>
+            </div>
+
+            <div id="distribucion-real" class="dashboard" style="grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px;">
+                </div>
+        </section>
+
+        <section class="seccion-formulario">
+            <h2>Simulador de Ingreso Futuro</h2>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="number" id="monto-simulado" placeholder="Ej: 30000" style="margin-bottom: 0;">
+                <button id="btn-simular" class="btn-verde" style="width: auto; white-space: nowrap;">Calcular Plan</button>
+            </div>
+
+            <div id="distribucion-simulada" class="dashboard" style="grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                </div>
+        </section>
+    </div>
+
+    <script src="js/calculadora.js"></script>
+</body>
+</html>
+
+
+
+
+

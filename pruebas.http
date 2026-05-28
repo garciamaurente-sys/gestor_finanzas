@@ -1,0 +1,64 @@
+### Variables Globales
+@url = http://localhost:3000
+
+### 1. AGREGAR UN INGRESO SEMANAL (Con ahorro automático)
+POST {{url}}/movimientos
+Content-Type: application/json
+
+{
+  "monto": 8500.00,
+  "tipo": "ingreso",
+  "categoria": "necesidad",
+  "descripcion": "Cobro de la primer semana de Mayo",
+  "frecuencia": "semanal"
+}
+
+### 2. AGREGAR UN EGRESO (Un gusto/deseo)
+POST {{url}}/movimientos
+Content-Type: application/json
+
+{
+  "monto": 1200.00,
+  "tipo": "egreso",
+  "categoria": "deseo",
+  "descripcion": "Cena de fin de semana con Katy",
+  "frecuencia": "eventual"
+}
+
+### 3. AGREGAR INGRESO EXTRA MANUAL (Los $U 20 sueltos)
+POST {{url}}/movimientos
+Content-Type: application/json
+
+{
+  "monto": 20.00,
+  "tipo": "ingreso",
+  "categoria": "necesidad",
+  "descripcion": "Monedas encontradas en la calle",
+  "frecuencia": "eventual"
+}
+
+### 4. ASIGNAR UN AHORRO MANUAL EXTRA (Para la mudanza con tu amigo)
+POST {{url}}/movimientos
+Content-Type: application/json
+
+{
+  "monto": 3000.00,
+  "tipo": "ingreso",
+  "categoria": "mudanza",
+  "descripcion": "Plata extra que meto directo al fondo del apartamento",
+  "frecuencia": "eventual"
+}
+
+### 5. VER EL DASHBOARD DEL MES ACTUAL (Todo lo abierto)
+GET {{url}}/dashboard
+
+### 6. ¡BOTÓN MÁGICO! CERRAR EL MES (Suma todo, guarda historial y limpia el mes)
+POST {{url}}/dashboard/cerrar-mes
+Content-Type: application/json
+
+{
+  "mes_anio": "Mayo 2026"
+}
+
+### 7. VER EL HISTORIAL DE MESES PASADOS (Dashboard acumulado)
+GET {{url}}/historial

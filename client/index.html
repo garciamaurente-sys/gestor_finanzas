@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Gestor Financiero</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="menu-navegacion">
+            <a href="index.html" class="btn-nav activo"> Reiniciar / Panel</a>
+            <a href="calculadora.html" class="btn-nav">🧮 Calculadora</a>
+            <a href="historial.html" class="btn-nav">📚 Historiales</a>
+        </nav>
+
+        <header>
+            <h1>Panel Principal</h1>
+
+            <div class="dashboard">
+                <div class="tarjeta">
+                    <h3>Fondo Mudanza</h3>
+                    <p id="total-mudanza">$U 0.00</p>
+                </div>
+                <div class="tarjeta">
+                    <h3>Ahorro Personal</h3>
+                    <p id="total-ahorro">$U 0.00</p>
+                </div>
+                <div class="tarjeta" style="border: 2px solid #10b981;">
+                    <h3>Plata Disponible</h3>
+                    <p id="total-ingresos">$U 0.00</p>
+                </div>
+                <div class="tarjeta alerta">
+                    <h3>Gastos Totales</h3>
+                    <p id="total-egresos">$U 0.00</p>
+                </div>
+            </div>
+
+            <button id="btn-cerrar-mes" class="btn-rojo">Cerrar Mes</button>
+        </header>
+
+        <section class="seccion-formulario">
+            <h2>Registrar Movimiento Manual</h2>
+            <form id="formulario-movimientos">
+
+                <input type="number" id="monto" placeholder="Monto en $U" required>
+
+                <select id="tipo" required>
+                    <option value="" disabled selected>¿Ingreso o Egreso?</option>
+                    <option value="ingreso">Ingreso (Suma)</option>
+                    <option value="egreso">Egreso / Ahorro (Resta de lo disponible)</option>
+                </select>
+
+                <select id="categoria" required>
+                    <option value="" disabled selected>Categoría</option>
+                    <option value="sueldos">Sueldos e Ingresos Extras</option>
+                    <option value="necesidad">Necesidad Básica</option>
+                    <option value="deseo">Gustos y Deseos</option>
+                    <option value="ahorro_personal">Ahorro Personal</option>
+                    <option value="mudanza">Fondo Mudanza</option>
+                </select>
+
+                <select id="frecuencia" required>
+                    <option value="" disabled selected>Frecuencia</option>
+                    <option value="semanal">Semanal</option>
+                    <option value="mensual">Mensual</option>
+                    <option value="eventual">Eventual / Extra</option>
+                </select>
+
+                <input type="text" id="descripcion" placeholder="Descripción breve..." required>
+
+                <button type="submit" class="btn-verde">Guardar</button>
+            </form>
+        </section>
+
+        <section class="seccion-lista">
+            <h2>Movimientos del Mes Actual</h2>
+            <ul id="lista-movimientos"></ul>
+        </section>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
