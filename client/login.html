@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/style_login.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="js/login.js"></script>
 </head>
 <body>
 
@@ -25,36 +24,6 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Guardamos el "Pase VIP" (Token)
-                    localStorage.setItem('token', data.token);
-                    alert("¡Bienvenido " + data.nombre + "!");
-                    // Redirigimos al panel principal
-                    window.location.href = '/';
-                } else {
-                    alert("Error: " + data.error);
-                }
-            } catch (error) {
-                console.error("Error al conectar con el servidor:", error);
-                alert("Error de conexión. Intentá más tarde.");
-            }
-        });
-    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>
