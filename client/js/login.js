@@ -18,10 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Guardamos el token
                     localStorage.setItem('token', data.token);
 
-                    // Alerta bonita de éxito
+                    // Solo SweetAlert, nada de alert() nativo
                     Swal.fire({
                         icon: 'success',
                         title: '¡Bienvenido!',
@@ -29,23 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = '/'; // Redirigimos al inicio/dashboard
+                        window.location.href = '/';
                     });
+
                 } else {
-                    // Alerta bonita de error
+                    // Aquí mostramos el mensaje que viene del backend
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: data.error || 'Credenciales incorrectas.',
+                        title: 'Acceso denegado',
+                        text: data.error || 'Correo o contraseña incorrectos.',
                         confirmButtonColor: '#6366f1'
                     });
                 }
             } catch (error) {
-                console.error("Error al conectar con el servidor:", error);
+                console.error("Error al conectar:", error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error de conexión',
-                    text: 'Hubo un problema. Intentá más tarde.',
+                    title: 'Error',
+                    text: 'Error de conexión. Intentá más tarde.',
                     confirmButtonColor: '#6366f1'
                 });
             }
