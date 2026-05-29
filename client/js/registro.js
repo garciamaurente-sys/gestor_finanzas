@@ -1,4 +1,3 @@
-// Esperamos a que el DOM cargue completamente
 document.addEventListener('DOMContentLoaded', () => {
     const formRegistro = document.getElementById('form-registro');
 
@@ -23,16 +22,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Verificamos la respuesta
                 if (respuesta.ok) {
-                    alert('¡Usuario registrado con éxito!');
-                    window.location.href = 'login.html'; // Redirigimos al Login
+                    // Alerta de éxito con SweetAlert2
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Ya podés iniciar sesión con tu nueva cuenta.',
+                        confirmButtonText: 'Ir a Login',
+                        confirmButtonColor: '#6366f1'
+                    }).then(() => {
+                        window.location.href = 'login.html';
+                    });
                 } else {
-                    // Si el servidor envía un error (ej: email duplicado)
-                    alert('Error: ' + (datos.error || 'No se pudo realizar el registro'));
+                    // Alerta de error (por ejemplo: email duplicado)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: datos.error || 'No se pudo realizar el registro.',
+                        confirmButtonColor: '#6366f1'
+                    });
                 }
             } catch (error) {
-                // Si hay un error de red o el servidor está caído
+                // Error de red
                 console.error('Error de conexión:', error);
-                alert('Hubo un problema de conexión con el servidor. Intentá más tarde.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'Hubo un problema al conectar con el servidor. Intentá más tarde.',
+                    confirmButtonColor: '#6366f1'
+                });
             }
         });
     }

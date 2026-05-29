@@ -32,20 +32,34 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
-
-// --- RUTAS DE AUTH ---
 app.post('/api/register', async (req, res) => {
     const { nombre, email, password } = req.body;
+
+    // 1. Validación básica: evitar campos vacíos
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ error: "Todos los campos son obligatorios." });
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await pool.query('INSERT INTO usuarios (nombre, email, password) VALUES ($1, $2, $3)', [nombre, email, hashedPassword]);
-        res.status(201).json({ message: "Usuario creado" });
+
+        await pool.query(
+            'INSERT INTO usuarios (nombre, email, password) VALUES ($1, $2, $3)',
+            [nombre, email, hashedPassword]
+        );
+
+        res.status(201).json({ message: "Usuario creado exitosamente." });
+
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Error al registrar" });
+        // 2. Identificar si el error es porque el email ya existe (Código 23505 en PostgreSQL)
+        if (err.code === '23505') {
+            return res.status(409).json({ error: "El correo electrónico ya está registrado." });
+        }
+
+        console.error("Error en registro:", err);
+        res.status(500).json({ error: "Error interno al procesar el registro." });
     }
 });
-
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
