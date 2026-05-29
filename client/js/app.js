@@ -2,14 +2,37 @@ const form = document.getElementById('formulario-movimientos');
 const cerrarMesBtn = document.getElementById('btn-cerrar-mes');
 const listaUL = document.getElementById('lista-movimientos');
 
+// --- 1. GUARDIA DE SEGURIDAD AL CARGAR ---
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = 'login.html';
+}
+
 function formatearFecha(fechaISO) {
     if (!fechaISO) return '';
     return new Date(fechaISO).toLocaleDateString('es-UY');
 }
 
+// --- FUNCIONES DE AYUDA ---
+// Esta función revisa si el token expiró (si el servidor devuelve 401 o 403)
+function manejarErrorAuth(respuesta) {
+    if (respuesta.status === 401 || respuesta.status === 403) {
+        alert("Tu sesión ha expirado. Por favor, inicia sesión de nuevo.");
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+        return true;
+    }
+    return false;
+}
+
 async function cargarDashboard() {
     try {
-        const respuesta = await fetch('/dashboard');
+        const respuesta = await fetch('/dashboard', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (manejarErrorAuth(respuesta)) return;
+
         const movimientos = await respuesta.json();
 
         let dineroDisponible = 0;
@@ -48,7 +71,6 @@ async function cargarDashboard() {
                     <button onclick="eliminarMovimiento(${mov.id})" style="background: var(--color-rojo); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">❌</button>
                 </div>
             `;
-
             listaUL.appendChild(li);
         });
 
@@ -65,19 +87,25 @@ async function cargarDashboard() {
 
 async function guardarMovimiento(e) {
     e.preventDefault();
-
-    const monto = document.getElementById('monto').value;
-    const tipo = document.getElementById('tipo').value;
-    const categoria = document.getElementById('categoria').value;
-    const frecuencia = document.getElementById('frecuencia').value;
-    const descripcion = document.getElementById('descripcion').value;
+    const body = {
+        monto: document.getElementById('monto').value,
+        tipo: document.getElementById('tipo').value,
+        categoria: document.getElementById('categoria').value,
+        descripcion: document.getElementById('descripcion').value,
+        frecuencia: document.getElementById('frecuencia').value
+    };
 
     try {
         const respuesta = await fetch('/movimientos', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ monto, tipo, categoria, descripcion, frecuencia })
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
         });
+
+        if (manejarErrorAuth(respuesta)) return;
 
         if (respuesta.ok) {
             form.reset();
@@ -93,29 +121,30 @@ async function guardarMovimiento(e) {
 async function cerrarMes() {
     const opciones = { month: 'long', year: 'numeric' };
     const mesAnioActual = new Date().toLocaleDateString('es-UY', opciones);
-    const confirmar = confirm(`¿Estás seguro de cerrar el mes de ${mesAnioActual}?
-Esto archivará todo en el Historial y dejará el panel en $0.`);
+    const confirmar = confirm(`¿Estás seguro de cerrar el mes de ${mesAnioActual}?`);
 
     if (!confirmar) return;
 
     try {
         const respuesta = await fetch('/dashboard/cerrar-mes', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({ mes_anio: mesAnioActual })
         });
 
-        const resultado = await respuesta.json();
+        if (manejarErrorAuth(respuesta)) return;
 
         if (respuesta.ok) {
             alert('Mes cerrado con éxito.');
             cargarDashboard();
         } else {
-            alert(`No se pudo cerrar: ${resultado.error}`);
+            alert(`No se pudo cerrar.`);
         }
     } catch (error) {
         console.error('Error al cerrar mes:', error);
-        alert('Hubo un error de conexión.');
     }
 }
 
@@ -124,7 +153,13 @@ window.eliminarMovimiento = async function(id) {
     if (!confirmar) return;
 
     try {
-        const respuesta = await fetch(`/movimientos/${id}`, { method: 'DELETE' });
+        const respuesta = await fetch(`/movimientos/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (manejarErrorAuth(respuesta)) return;
+
         if (respuesta.ok) {
             cargarDashboard();
         }
@@ -136,11 +171,16 @@ window.eliminarMovimiento = async function(id) {
 document.addEventListener('DOMContentLoaded', () => {
     cargarDashboard();
 
-    if (form) {
-        form.addEventListener('submit', guardarMovimiento);
-    }
+    if (form) form.addEventListener('submit', guardarMovimiento);
+    if (cerrarMesBtn) cerrarMesBtn.addEventListener('click', cerrarMes);
 
-    if (cerrarMesBtn) {
-        cerrarMesBtn.addEventListener('click', cerrarMes);
+    // Logout
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        });
     }
 });
