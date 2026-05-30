@@ -46,45 +46,26 @@ async function cargarHistorial() {
                 else if (mov.tipo === 'egreso') egresos += monto;
             });
 
-            // Creamos el contenedor del mes usando tus clases existentes
             const bloqueMes = document.createElement('div');
-            bloqueMes.className = 'seccion-lista'; // Clase para fondo blanco y sombras
-            bloqueMes.style.marginBottom = "20px";
+            bloqueMes.className = 'card-historial';
 
             bloqueMes.innerHTML = `
-                <h2>📅 ${mes}</h2>
+                <h3 style="font-size: 15px; margin-bottom: 5px;">📅 ${mes}</h3>
 
-                <div class="dashboard" style="margin-bottom: 20px;">
-                    <div class="tarjeta">
-                        <h3>Ingresos</h3>
-                        <p style="color: var(--color-verde);">$U ${ingresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
-                    </div>
-                    <div class="tarjeta alerta">
-                        <h3>Gastos</h3>
-                        <p style="color: var(--color-rojo);">$U ${egresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
-                    </div>
-                    <div class="tarjeta">
-                        <h3>Mudanza</h3>
-                        <p style="color: var(--color-azul);">$U ${mudanza.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
-                    </div>
-                    <div class="tarjeta">
-                        <h3>Ahorro</h3>
-                        <p style="color: var(--color-azul);">$U ${ahorro.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
-                    </div>
+                <div class="grid-historial">
+                    <div class="item-resumen-historial"><small>Ingreso</small><span style="color:var(--color-verde)">$U ${ingresos.toLocaleString('es-UY')}</span></div>
+                    <div class="item-resumen-historial"><small>Gastos</small><span style="color:var(--color-rojo)">$U ${egresos.toLocaleString('es-UY')}</span></div>
+                    <div class="item-resumen-historial"><small>Mudanza</small><span style="color:var(--color-azul)">$U ${mudanza.toLocaleString('es-UY')}</span></div>
+                    <div class="item-resumen-historial"><small>Ahorro</small><span style="color:var(--color-azul)">$U ${ahorro.toLocaleString('es-UY')}</span></div>
                 </div>
 
-                <details style="cursor: pointer; color: var(--texto-secundario);">
-                    <summary>Ver desglose de movimientos</summary>
-                    <ul id="lista-movimientos" style="margin-top: 15px;">
+                <details style="cursor: pointer; font-size: 11px; color: var(--texto-secundario);">
+                    <summary>Ver detalle</summary>
+                    <ul style="list-style: none; margin-top: 5px;">
                         ${listaMovimientos.map(mov => `
-                            <li class="item-movimiento ${mov.tipo}">
-                                <div class="item-info">
-                                    <span class="item-descripcion">${mov.descripcion}</span>
-                                    <span class="item-meta">${mov.categoria.toUpperCase()}</span>
-                                </div>
-                                <span class="item-monto ${mov.tipo}">
-                                    ${mov.tipo === 'ingreso' ? '+' : '-'} $U ${parseFloat(mov.monto).toLocaleString('es-UY')}
-                                </span>
+                            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 2px 0;">
+                                <span>${mov.descripcion}</span>
+                                <span>$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
                             </li>
                         `).join('')}
                     </ul>

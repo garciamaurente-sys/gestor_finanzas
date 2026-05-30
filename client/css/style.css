@@ -14,11 +14,7 @@
     --fuente: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-principal);
@@ -28,26 +24,13 @@ body {
     padding: 20px;
 }
 
-.contenedor-principal {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+.contenedor-principal { max-width: 1000px; margin: 0 auto; }
 
 /* ==========================================================================
    ENCABEZADO Y DASHBOARD (Tarjetas de totales)
    ========================================================================== */
-header {
-    margin-bottom: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-header h1 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--texto-principal);
-}
+header { margin-bottom: 30px; display: flex; flex-direction: column; gap: 20px; }
+header h1 { font-size: 24px; font-weight: 700; color: var(--texto-principal); }
 
 .dashboard {
     display: grid;
@@ -64,30 +47,14 @@ header h1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.tarjeta h3 {
-    font-size: 14px;
-    color: var(--texto-secundario);
-    font-weight: 600;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.tarjeta p {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-verde); /* Por defecto los ingresos/ahorros van en verde */
-}
-
-/* Variación para la tarjeta de egresos/gastos */
-.tarjeta.alerta p {
-    color: var(--color-rojo);
-}
+.tarjeta h3 { font-size: 14px; color: var(--texto-secundario); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.tarjeta p { font-size: 24px; font-weight: 700; color: var(--color-verde); }
+.tarjeta.alerta p { color: var(--color-rojo); }
 
 /* ==========================================================================
-   FORMULARIO DE CARGA
+   FORMULARIO Y LISTA DE MOVIMIENTOS
    ========================================================================== */
-.seccion-formulario {
+.seccion-formulario, .seccion-lista {
     background-color: var(--bg-tarjeta);
     padding: 24px;
     border-radius: var(--radio);
@@ -96,198 +63,70 @@ header h1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.seccion-formulario h2, .seccion-lista h2 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--texto-principal);
-}
+.seccion-formulario h2, .seccion-lista h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--texto-principal); }
 
-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    align-items: end;
-}
+form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; }
+input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--borde); border-radius: 8px; outline: none; }
+input:focus, select:focus { border-color: var(--color-azul); }
 
-/* Logramos que la descripción ocupe toda la fila si hay espacio */
-input[type="text"]#descripcion {
-    grid-column: span auto;
-}
+button { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; }
+.btn-verde { background-color: var(--color-verde); color: white; }
+.btn-rojo { background-color: var(--color-rojo); color: white; }
 
-input, select {
-    width: 100%;
-    padding: 10px 14px;
-    font-size: 14px;
-    border: 1px solid var(--borde);
-    border-radius: 8px;
-    background-color: #fff;
-    color: var(--texto-principal);
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-input:focus, select:focus {
-    border-color: var(--color-azul);
-}
+#lista-movimientos { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.item-movimiento { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 8px; background-color: var(--bg-principal); border-left: 5px solid var(--borde); }
+.item-movimiento.ingreso { border-left-color: var(--color-verde); }
+.item-movimiento.egreso { border-left-color: var(--color-rojo); }
+.item-descripcion { font-weight: 600; font-size: 14px; }
+.item-meta { font-size: 12px; color: var(--texto-secundario); }
+.item-monto { font-weight: 700; font-size: 16px; }
+.item-monto.ingreso { color: var(--color-verde); }
+.item-monto.egreso { color: var(--color-rojo); }
 
 /* ==========================================================================
-   BOTONES
+   NUEVOS ESTILOS PARA EL HISTORIAL (COMPACTO)
    ========================================================================== */
-button {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
+.card-historial {
+    background-color: var(--bg-tarjeta);
+    padding: 15px;
     border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid var(--borde);
+    margin-bottom: 12px;
+}
+
+.grid-historial {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.item-resumen-historial {
+    background: var(--bg-principal);
+    padding: 8px 4px;
+    border-radius: 6px;
     text-align: center;
 }
 
-button:active {
-    transform: scale(0.98);
+.item-resumen-historial small {
+    display: block;
+    font-size: 9px;
+    color: var(--texto-secundario);
+    text-transform: uppercase;
 }
 
-.btn-verde {
-    background-color: var(--color-verde);
-    color: white;
-}
-
-.btn-verde:hover {
-    background-color: #059669;
-}
-
-.btn-rojo {
-    background-color: var(--color-rojo);
-    color: white;
-    align-self: flex-start; /* Evita que el botón de cerrar mes se estire horizontalmente */
-}
-
-.btn-rojo:hover {
-    background-color: #dc2626;
-}
-
-/* ==========================================================================
-   LISTA DE MOVIMIENTOS
-   ========================================================================== */
-.seccion-lista {
-    background-color: var(--bg-tarjeta);
-    padding: 24px;
-    border-radius: var(--radio);
-    border: 1px solid var(--borde);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-#lista-movimientos {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Estilo para cada fila de movimiento */
-.item-movimiento {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    border-radius: 8px;
-    background-color: var(--bg-principal);
-    border-left: 5px solid var(--borde); /* Borde dinámico según el tipo */
-}
-
-/* Variaciones dinámicas que aplicaremos con JS */
-.item-movimiento.ingreso {
-    border-left-color: var(--color-verde);
-}
-
-.item-movimiento.egreso {
-    border-left-color: var(--color-rojo);
-}
-
-.item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.item-descripcion {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.item-meta {
+.item-resumen-historial span {
     font-size: 12px;
-    color: var(--texto-secundario);
-}
-
-.item-monto {
     font-weight: 700;
-    font-size: 16px;
-}
-
-.item-monto.ingreso {
-    color: var(--color-verde);
-}
-
-.item-monto.egreso {
-    color: var(--color-rojo);
-}
-
-/* Responsive para pantallas medianas/grandes en el encabezado */
-@media (min-width: 600px) {
-    header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .btn-rojo {
-        align-self: auto;
-    }
 }
 
 /* ==========================================================================
-   NUEVOS ESTILOS PARA EL MENÚ DE NAVEGACIÓN
+   NAVEGACIÓN
    ========================================================================== */
-.menu-navegacion {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-    background-color: var(--bg-tarjeta);
-    padding: 10px;
-    border-radius: var(--radio);
-    border: 1px solid var(--borde);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+.menu-navegacion { display: flex; gap: 10px; margin-bottom: 25px; background-color: var(--bg-tarjeta); padding: 10px; border-radius: var(--radio); border: 1px solid var(--borde); }
+.btn-nav { text-decoration: none; padding: 10px 20px; font-weight: 600; border-radius: 8px; color: var(--texto-secundario); }
+.btn-nav.activo { color: white; background-color: var(--color-azul); }
+
+@media (min-width: 600px) {
+    header { flex-direction: row; justify-content: space-between; align-items: center; }
 }
-
-.btn-nav {
-    text-decoration: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    color: var(--texto-secundario);
-    background-color: transparent;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.btn-nav:hover {
-    color: var(--texto-principal);
-    background-color: var(--bg-principal);
-}
-
-/* Clase especial para iluminar la página donde estás parado */
-.btn-nav.activo {
-    color: white;
-    background-color: var(--color-azul);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-}
-
-
-
-
-
