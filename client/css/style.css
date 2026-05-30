@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CONFIGURACIÓN GENERAL
+   CONFIGURACIÓN GENERAL Y VARIABLES
    ========================================================================== */
 :root {
     --bg-principal: #f8fafc;
@@ -15,54 +15,138 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background-color: var(--bg-principal); color: var(--texto-principal); font-family: var(--fuente); line-height: 1.6; padding: 20px; }
 
-/* ... (Mantener dashboard, header y otras secciones igual) ... */
-
-/* ==========================================================================
-   LISTA DE MOVIMIENTOS (Estilo Unificado)
-   ========================================================================== */
-#lista-movimientos, .lista-detalles-historial {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Separación un poco más amplia */
+body {
+    background-color: var(--bg-principal);
+    color: var(--texto-principal);
+    font-family: var(--fuente);
+    line-height: 1.6;
+    padding: 20px;
 }
 
-.item-movimiento {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px; /* Un poquito más grandes */
-    border-radius: 8px;
-    background-color: var(--bg-tarjeta);
-    border-left: 5px solid var(--borde);
-    border: 1px solid var(--borde);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-}
-
-.item-movimiento.ingreso { border-left-color: var(--color-verde); }
-.item-movimiento.egreso { border-left-color: var(--color-rojo); }
-
-.item-descripcion { font-weight: 600; font-size: 15px; } /* Ligeramente más grande */
-.item-monto { font-weight: 700; font-size: 16px; }
-.item-monto.ingreso { color: var(--color-verde); }
-.item-monto.egreso { color: var(--color-rojo); }
+.contenedor-principal { max-width: 1000px; margin: 0 auto; }
 
 /* ==========================================================================
-   ESTILOS HISTORIAL (Contenedor)
+   ENCABEZADO Y DASHBOARD (Tarjetas de totales)
    ========================================================================== */
-.card-historial {
+header { margin-bottom: 30px; display: flex; flex-direction: column; gap: 20px; }
+header h1 { font-size: 24px; font-weight: 700; color: var(--texto-principal); }
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+.tarjeta {
     background-color: var(--bg-tarjeta);
     padding: 20px;
     border-radius: var(--radio);
     border: 1px solid var(--borde);
-    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.grid-historial { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 15px 0; }
-.item-resumen-historial { background: var(--bg-principal); padding: 12px 8px; border-radius: 8px; text-align: center; }
+.tarjeta h3 { font-size: 14px; color: var(--texto-secundario); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.tarjeta p { font-size: 24px; font-weight: 700; color: var(--color-verde); }
+.tarjeta.alerta p { color: var(--color-rojo); }
 
-/* Detalles dentro del historial */
-.historial-details { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--borde); cursor: pointer; }
-.historial-details summary { font-weight: 600; font-size: 14px; color: var(--texto-secundario); margin-bottom: 10px; }
+/* ==========================================================================
+   FORMULARIO Y LISTA DE MOVIMIENTOS
+   ========================================================================== */
+.seccion-formulario, .seccion-lista {
+    background-color: var(--bg-tarjeta);
+    padding: 24px;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.seccion-formulario h2, .seccion-lista h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--texto-principal); }
+
+form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; }
+input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--borde); border-radius: 8px; outline: none; }
+input:focus, select:focus { border-color: var(--color-azul); }
+
+button { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; }
+.btn-verde { background-color: var(--color-verde); color: white; }
+.btn-rojo { background-color: var(--color-rojo); color: white; }
+
+#lista-movimientos { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.item-movimiento { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 8px; background-color: var(--bg-principal); border-left: 5px solid var(--borde); }
+.item-movimiento.ingreso { border-left-color: var(--color-verde); }
+.item-movimiento.egreso { border-left-color: var(--color-rojo); }
+
+/* ==========================================================================
+   NUEVOS ESTILOS PARA EL HISTORIAL (AJUSTADO)
+   ========================================================================== */
+.card-historial {
+    background-color: var(--bg-tarjeta);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
+    margin-bottom: 16px;
+}
+
+.grid-historial {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.item-resumen-historial {
+    background: var(--bg-principal);
+    padding: 12px 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.item-resumen-historial small {
+    display: block;
+    font-size: 10px;
+    color: var(--texto-secundario);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.item-resumen-historial span {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Estilos para detalles */
+.historial-details {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid var(--borde);
+    cursor: pointer;
+    color: var(--texto-secundario);
+    font-size: 13px;
+}
+
+.historial-details summary {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.historial-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: var(--texto-principal);
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* ==========================================================================
+   NAVEGACIÓN
+   ========================================================================== */
+.menu-navegacion { display: flex; gap: 10px; margin-bottom: 25px; background-color: var(--bg-tarjeta); padding: 10px; border-radius: var(--radio); border: 1px solid var(--borde); }
+.btn-nav { text-decoration: none; padding: 10px 20px; font-weight: 600; border-radius: 8px; color: var(--texto-secundario); }
+.btn-nav.activo { color: white; background-color: var(--color-azul); }
+
+@media (min-width: 600px) {
+    header { flex-direction: row; justify-content: space-between; align-items: center; }
+}
