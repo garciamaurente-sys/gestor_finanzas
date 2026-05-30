@@ -7,26 +7,17 @@ async function cargarHistorial() {
 
         const respuesta = await fetch('/api/historial', {
             method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
         });
 
         if (!respuesta.ok) throw new Error(`Error ${respuesta.status}`);
 
         const movimientosAnteriores = await respuesta.json();
         const contenedor = document.getElementById('contenedor-historiales');
-        const mensajeVacio = document.getElementById('mensaje-vacio');
 
         contenedor.innerHTML = '';
 
-        if (!Array.isArray(movimientosAnteriores) || movimientosAnteriores.length === 0) {
-            if (mensajeVacio) mensajeVacio.style.display = 'block';
-            return;
-        }
-
-        if (mensajeVacio) mensajeVacio.style.display = 'none';
+        if (!Array.isArray(movimientosAnteriores) || movimientosAnteriores.length === 0) return;
 
         const mesesAgrupados = {};
         movimientosAnteriores.forEach(mov => {
@@ -50,8 +41,7 @@ async function cargarHistorial() {
             bloqueMes.className = 'card-historial';
 
             bloqueMes.innerHTML = `
-                <h3 style="font-size: 16px; margin-bottom: 5px;">📅 ${mes}</h3>
-
+                <h3 style="font-size: 18px; margin-bottom: 10px;">📅 ${mes}</h3>
                 <div class="grid-historial">
                     <div class="item-resumen-historial"><small>Ingreso</small><span style="color:var(--color-verde)">$U ${ingresos.toLocaleString('es-UY')}</span></div>
                     <div class="item-resumen-historial"><small>Gastos</small><span style="color:var(--color-rojo)">$U ${egresos.toLocaleString('es-UY')}</span></div>
@@ -61,11 +51,11 @@ async function cargarHistorial() {
 
                 <details class="historial-details">
                     <summary>Ver detalle de movimientos</summary>
-                    <ul style="list-style: none;">
+                    <ul class="lista-detalles-historial">
                         ${listaMovimientos.map(mov => `
-                            <li class="historial-item">
-                                <span>${mov.descripcion}</span>
-                                <span style="font-weight: 600;">$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
+                            <li class="item-movimiento ${mov.tipo}">
+                                <span class="item-descripcion">${mov.descripcion}</span>
+                                <span class="item-monto ${mov.tipo}">$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
                             </li>
                         `).join('')}
                     </ul>
