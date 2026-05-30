@@ -50,25 +50,30 @@ async function cargarHistorial() {
             bloqueMes.className = 'card-historial';
 
             bloqueMes.innerHTML = `
-                <h3 style="font-size: 16px; margin-bottom: 5px;">📅 ${mes}</h3>
+                <h2 style="margin-bottom: 15px;">📅 ${mes}</h2>
 
-                <div class="grid-historial">
-                    <div class="item-resumen-historial"><small>Ingreso</small><span style="color:var(--color-verde)">$U ${ingresos.toLocaleString('es-UY')}</span></div>
-                    <div class="item-resumen-historial"><small>Gastos</small><span style="color:var(--color-rojo)">$U ${egresos.toLocaleString('es-UY')}</span></div>
-                    <div class="item-resumen-historial"><small>Mudanza</small><span style="color:var(--color-azul)">$U ${mudanza.toLocaleString('es-UY')}</span></div>
-                    <div class="item-resumen-historial"><small>Ahorro</small><span style="color:var(--color-azul)">$U ${ahorro.toLocaleString('es-UY')}</span></div>
+                <div class="grid-historial-resumen">
+                    <div class="item-resumen"><small>Ingresos</small><span style="color:var(--color-verde)">$U ${ingresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</span></div>
+                    <div class="item-resumen"><small>Gastos</small><span style="color:var(--color-rojo)">$U ${egresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</span></div>
+                    <div class="item-resumen"><small>Mudanza</small><span style="color:var(--color-azul)">$U ${mudanza.toLocaleString('es-UY', {minimumFractionDigits: 2})}</span></div>
+                    <div class="item-resumen"><small>Ahorro</small><span style="color:var(--color-azul)">$U ${ahorro.toLocaleString('es-UY', {minimumFractionDigits: 2})}</span></div>
                 </div>
 
-                <details class="historial-details">
+                <details class="details-historial">
                     <summary>Ver detalle de movimientos</summary>
-                    <ul style="list-style: none;">
+                    <div id="lista-movimientos" style="margin-top: 15px;">
                         ${listaMovimientos.map(mov => `
-                            <li class="historial-item">
-                                <span>${mov.descripcion}</span>
-                                <span style="font-weight: 600;">$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
-                            </li>
+                            <div class="item-movimiento ${mov.tipo}">
+                                <div class="item-info">
+                                    <span class="item-descripcion">${mov.descripcion}</span>
+                                    <span class="item-meta">${mov.categoria.toUpperCase()}</span>
+                                </div>
+                                <span class="item-monto ${mov.tipo}">
+                                    ${mov.tipo === 'ingreso' ? '+' : '-'} $U ${parseFloat(mov.monto).toLocaleString('es-UY')}
+                                </span>
+                            </div>
                         `).join('')}
-                    </ul>
+                    </div>
                 </details>
             `;
             contenedor.appendChild(bloqueMes);
