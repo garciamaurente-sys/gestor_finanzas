@@ -5,7 +5,6 @@ async function cargarHistorial() {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        // Ahora apunta a /api/historial
         const respuesta = await fetch('/api/historial', {
             method: 'GET',
             headers: {
@@ -47,23 +46,45 @@ async function cargarHistorial() {
                 else if (mov.tipo === 'egreso') egresos += monto;
             });
 
+            // Creamos el contenedor del mes usando tus clases existentes
             const bloqueMes = document.createElement('div');
-            bloqueMes.className = 'tarjeta-mes';
-            bloqueMes.style.cssText = "background: var(--bg-tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: 20px; margin-bottom: 20px;";
+            bloqueMes.className = 'seccion-lista'; // Clase para fondo blanco y sombras
+            bloqueMes.style.marginBottom = "20px";
 
             bloqueMes.innerHTML = `
-                <h3 style="color: var(--color-azul); border-bottom: 2px solid var(--bg-principal); padding-bottom: 8px; margin-bottom: 15px; text-transform: capitalize;">📅 ${mes}</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; font-size: 13px;">
-                    <div><strong>Ingresos:</strong> $U ${ingresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</div>
-                    <div><strong>Gastos:</strong> $U ${egresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</div>
+                <h2>📅 ${mes}</h2>
+
+                <div class="dashboard" style="margin-bottom: 20px;">
+                    <div class="tarjeta">
+                        <h3>Ingresos</h3>
+                        <p style="color: var(--color-verde);">$U ${ingresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="tarjeta alerta">
+                        <h3>Gastos</h3>
+                        <p style="color: var(--color-rojo);">$U ${egresos.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="tarjeta">
+                        <h3>Mudanza</h3>
+                        <p style="color: var(--color-azul);">$U ${mudanza.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="tarjeta">
+                        <h3>Ahorro</h3>
+                        <p style="color: var(--color-azul);">$U ${ahorro.toLocaleString('es-UY', {minimumFractionDigits: 2})}</p>
+                    </div>
                 </div>
-                <details style="cursor: pointer; font-size: 13px; color: var(--texto-secundario);">
-                    <summary>Ver movimientos</summary>
-                    <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+
+                <details style="cursor: pointer; color: var(--texto-secundario);">
+                    <summary>Ver desglose de movimientos</summary>
+                    <ul id="lista-movimientos" style="margin-top: 15px;">
                         ${listaMovimientos.map(mov => `
-                            <li style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #eee;">
-                                <span>${mov.descripcion}</span>
-                                <span>$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
+                            <li class="item-movimiento ${mov.tipo}">
+                                <div class="item-info">
+                                    <span class="item-descripcion">${mov.descripcion}</span>
+                                    <span class="item-meta">${mov.categoria.toUpperCase()}</span>
+                                </div>
+                                <span class="item-monto ${mov.tipo}">
+                                    ${mov.tipo === 'ingreso' ? '+' : '-'} $U ${parseFloat(mov.monto).toLocaleString('es-UY')}
+                                </span>
                             </li>
                         `).join('')}
                     </ul>
@@ -72,6 +93,6 @@ async function cargarHistorial() {
             contenedor.appendChild(bloqueMes);
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error al cargar historial:', error);
     }
 }
