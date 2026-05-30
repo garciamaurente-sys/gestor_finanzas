@@ -50,7 +50,7 @@ async function cargarHistorial() {
             bloqueMes.className = 'card-historial';
 
             bloqueMes.innerHTML = `
-                <h3 style="font-size: 15px; margin-bottom: 5px;">📅 ${mes}</h3>
+                <h3 style="font-size: 16px; margin-bottom: 5px;">📅 ${mes}</h3>
 
                 <div class="grid-historial">
                     <div class="item-resumen-historial"><small>Ingreso</small><span style="color:var(--color-verde)">$U ${ingresos.toLocaleString('es-UY')}</span></div>
@@ -59,13 +59,13 @@ async function cargarHistorial() {
                     <div class="item-resumen-historial"><small>Ahorro</small><span style="color:var(--color-azul)">$U ${ahorro.toLocaleString('es-UY')}</span></div>
                 </div>
 
-                <details style="cursor: pointer; font-size: 11px; color: var(--texto-secundario);">
-                    <summary>Ver detalle</summary>
-                    <ul style="list-style: none; margin-top: 5px;">
+                <details class="historial-details">
+                    <summary>Ver detalle de movimientos</summary>
+                    <ul style="list-style: none;">
                         ${listaMovimientos.map(mov => `
-                            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 2px 0;">
+                            <li class="historial-item">
                                 <span>${mov.descripcion}</span>
-                                <span>$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
+                                <span style="font-weight: 600;">$U ${parseFloat(mov.monto).toLocaleString('es-UY')}</span>
                             </li>
                         `).join('')}
                     </ul>
