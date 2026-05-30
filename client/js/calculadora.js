@@ -6,15 +6,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function calcularSueldoReal() {
     try {
-        const respuesta = await fetch('/dashboard');
+        // 1. Obtenemos el token guardado en el navegador
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.error('No hay sesión activa. Falta el token.');
+            return;
+        }
+
+        // 2. Le pasamos el token en los headers de la petición
+        const respuesta = await fetch('/dashboard', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // 3. Verificamos que la respuesta del servidor sea exitosa (código 200)
+        if (!respuesta.ok) {
+            throw new Error(`Error en la petición: ${respuesta.status}`);
+        }
+
         const movimientos = await respuesta.json();
 
         let totalSueldos = 0;
-        movimientos.forEach(mov => {
-            if (mov.categoria === 'sueldos' || (mov.tipo === 'ingreso' && mov.categoria !== 'mudanza' && mov.categoria !== 'ahorro_personal')) {
-                totalSueldos += parseFloat(mov.monto);
-            }
-        });
+
+        // 4. Nos aseguramos de que lo que llegó sea realmente un Array antes de hacer forEach
+        if (Array.isArray(movimientos)) {
+            movimientos.forEach(mov => {
+                if (mov.categoria === 'sueldos' || (mov.tipo === 'ingreso' && mov.categoria !== 'mudanza' && mov.categoria !== 'ahorro_personal')) {
+                    totalSueldos += parseFloat(mov.monto);
+                }
+            });
+        }
 
         document.getElementById('sueldo-real-monto').innerText = `$U ${totalSueldos.toLocaleString('es-UY', { minimumFractionDigits: 2 })}`;
 
@@ -65,4 +90,3 @@ function renderizarTarjetas(montoTotal, contenedorId) {
         </div>
     `;
 }
-

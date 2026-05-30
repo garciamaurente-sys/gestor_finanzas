@@ -2,7 +2,30 @@ document.addEventListener('DOMContentLoaded', cargarHistorial);
 
 async function cargarHistorial() {
     try {
-        const respuesta = await fetch('/historial');
+        // 1. Obtenemos el token guardado
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.error('No hay sesión activa. Falta el token.');
+            // Opcional: podrías redirigir al login acá si no hay token
+            // window.location.href = '/login.html';
+            return;
+        }
+
+        // 2. Hacemos el fetch agregando los Headers con el Bearer Token
+        const respuesta = await fetch('/historial', { // <-- Ojo: verificá si tu ruta es /historial o /api/historial
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // 3. Verificamos que la respuesta no sea un error 404 HTML
+        if (!respuesta.ok) {
+            throw new Error(`Error del servidor: ${respuesta.status}`);
+        }
+
         const movimientosAnteriores = await respuesta.json();
 
         const contenedor = document.getElementById('contenedor-historiales');
@@ -10,7 +33,8 @@ async function cargarHistorial() {
 
         contenedor.innerHTML = '';
 
-        if (!movimientosAnteriores || movimientosAnteriores.length === 0) {
+        // 4. Verificación de seguridad por si no es un array
+        if (!Array.isArray(movimientosAnteriores) || movimientosAnteriores.length === 0) {
             if (mensajeVacio) mensajeVacio.style.display = 'block';
             return;
         }
@@ -75,6 +99,8 @@ async function cargarHistorial() {
 
     } catch (error) {
         console.error('Error al cargar historial de meses:', error);
+        // Opcional: mostrar un mensaje en el HTML si hay error
+        const contenedor = document.getElementById('contenedor-historiales');
+        if(contenedor) contenedor.innerHTML = '<p style="color: red; text-align: center;">Error de conexión. Intente iniciar sesión nuevamente.</p>';
     }
 }
-
